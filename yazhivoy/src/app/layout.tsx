@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import Script from "next/script";
+import { CookieBanner } from "@/components/CookieBanner";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"] });
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={`${geist.className} min-h-full bg-zinc-950 text-zinc-100 antialiased`}>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

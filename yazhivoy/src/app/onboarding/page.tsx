@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { requireAuth } from "@/lib/auth"
 
 const INTERVALS = [
@@ -16,6 +17,7 @@ export default function OnboardingPage() {
   const [interval, setInterval] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [consentGiven, setConsentGiven] = useState(false)
   const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -87,9 +89,28 @@ export default function OnboardingPage() {
 
           {error && <p className="text-red-400 text-sm">{error}</p>}
 
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={consentGiven}
+              onChange={(e) => setConsentGiven(e.target.checked)}
+              className="mt-0.5 w-4 h-4 accent-emerald-500 flex-shrink-0"
+            />
+            <span className="text-xs text-zinc-400 leading-relaxed">
+              Я принимаю{" "}
+              <Link href="/privacy" className="text-emerald-500 underline" target="_blank">
+                политику обработки персональных данных
+              </Link>{" "}
+              и даю{" "}
+              <Link href="/consent" className="text-emerald-500 underline" target="_blank">
+                согласие на обработку персональных данных
+              </Link>
+            </span>
+          </label>
+
           <button
             type="submit"
-            disabled={loading || !name.trim() || !interval}
+            disabled={loading || !name.trim() || !interval || !consentGiven}
             className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded-lg py-2.5 font-medium transition-colors"
           >
             {loading ? "сохраняю…" : "начать"}

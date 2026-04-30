@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 declare global {
   interface Window {
@@ -26,6 +27,7 @@ export default function LoginPage() {
   const [botUrl, setBotUrl] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [consentGiven, setConsentGiven] = useState(false)
   const [secondsLeft, setSecondsLeft] = useState(300)
   const [showHint, setShowHint] = useState(false)
   const router = useRouter()
@@ -172,9 +174,28 @@ export default function LoginPage() {
 
             {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consentGiven}
+                onChange={(e) => setConsentGiven(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-emerald-500 flex-shrink-0"
+              />
+              <span className="text-xs text-zinc-400 leading-relaxed">
+                Я принимаю{" "}
+                <Link href="/privacy" className="text-emerald-500 underline" target="_blank">
+                  политику обработки персональных данных
+                </Link>{" "}
+                и даю{" "}
+                <Link href="/consent" className="text-emerald-500 underline" target="_blank">
+                  согласие на обработку персональных данных
+                </Link>
+              </span>
+            </label>
+
             <button
               onClick={handleLogin}
-              disabled={loading}
+              disabled={loading || !consentGiven}
               className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded-lg py-3 font-medium transition-colors flex items-center justify-center gap-2"
             >
               {loading ? (
